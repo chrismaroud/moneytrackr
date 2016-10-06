@@ -1,0 +1,72 @@
+buildscript {
+	ext {
+		springBootVersion = '1.4.1.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'spring-boot'
+
+jar {
+	baseName = 'moneytracker'
+	version = '1.0-SNAPSHOT'
+}
+
+ext.credentials = new Properties();
+credentials.load(file(System.getProperty('user.home') + '/.gradle.credentials').newReader())
+
+//task copy(type: Copy) {
+//    from 'src/main/resources'
+//    into "$buildDir"
+//    include 'application-template.yaml'
+//    rename { file -> 'application.yaml' }
+//    expand(project: project, title: 'ProjectInfo', generated: new Date())
+//}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+    maven{
+        url 'https://oss.sonatype.org/content/repositories/snapshots/'
+    }
+}
+
+
+dependencies {
+	compile('org.springframework.boot:spring-boot-starter-data-mongodb')
+	compile('org.springframework.boot:spring-boot-starter-jersey')
+	compile('org.springframework.boot:spring-boot-starter-security')
+//	compile 'com.bitsfromspace:utils:1.0-SNAPSHOT'
+    compile 'com.bitsfromspace:utils:1.0-SNAPSHOT'
+//    compile('org.springframework.boot:spring-boot-starter-thymeleaf')
+	compile('org.springframework.boot:spring-boot-devtools') //TODO: Remove from prod classpath?
+    compile('org.springframework.security.oauth:spring-security-oauth2')
+
+    compile 'org.webjars:angularjs:1.5.8'
+    compile 'org.webjars:bootstrap:3.3.7'
+
+    compile 'org.jsoup:jsoup:1.8.3'
+	compile 'com.eclipsesource.minimal-json:minimal-json:0.9.4'
+
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+	//compile project(":utils")
+}
+
+
+task copy(type: Copy) {
+    from 'src/main/resources'
+    into "$buildDir"
+    include 'application-template.yaml'
+    rename { file -> 'application.yaml' }
+    //expand(project: project, title: 'ProjectInfo', generated: new Date())
+    expand(credentials)
+}
+

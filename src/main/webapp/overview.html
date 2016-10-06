@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>MoneyTrackR.com</title>
+        <!-- Bootstrap Core CSS -->
+        <link href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Theme CSS -->
+        <link href="css/mtrack.css" rel="stylesheet">
+        <!-- Social bootstrap -->
+        <link href="css/bootstrap-social.css" rel="stylesheet">
+        <!-- Custom Fonts -->
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+        <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+        <!-- jQuery -->
+        <script src="/webjars/jquery/1.11.1/jquery.min.js"></script>
+        <!-- Bootstrap Core JavaScript -->
+        <script src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <!-- Theme JavaScript -->
+        <script src="js/mtracker-theme.js"></script>
+        <!-- Overlay -->
+        <script src="js/loadingoverlay.min.js"></script>
+    </head>
+    <body ng-app="app" ng-controller="home as home">
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header page-scroll">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        Menu <i class="fa fa-bars"></i>
+                    </button>
+                    <a class="navbar-brand" href="/">
+                        <span>
+                            <img src="img/logo32.png"/>
+                        </span>
+                        MoneyTrackr &nbsp;&nbsp;
+                    </a>
+                </div>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <img src="{{home.pictureUrl}}" width="32" height="32"/>
+                                    {{home.user}}
+                            <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a href="#" ng-click='home.logout()'>Logout</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- Button trigger modal -->
+                            <!--<button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#loginModal">-->
+                            <!--Login / Sign up!-->
+                            <!--</button>-->
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+            </div>
+            <!-- /.container -->
+        </nav>
+        <!-- Page Header -->
+        <!-- Set your background image for this header on the line below. -->
+        <header class="intro-header" style="background-image: url('img/home-bg.jpg')">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-md-10">
+                        <p>&nbsp;</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- Main Content -->
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="alert alert-danger alert-dismissible" role="alert" ng-show="home.error">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <strong>{{home.error}}!</strong>
+                        {{home.errorMessage}}
+            
+                    </div>
+                    <ul class="nav nav-pills">
+                        <li class="active">
+                            <a data-toggle="tab" href="#overview">Overview</a>
+                        </li>
+                        <li>
+                            <a data-toggle="tab" href="#assets">Assets</a>
+                        </li>
+                        <li>
+                            <a data-toggle="tab" href="#results">Results</a>
+                        </li>
+                        <li>
+                            <a data-toggle="tab" href="#analytics">Analytics</a>
+                        </li>
+                    </ul>
+                    <hr/>
+
+<div class="tab-content">
+  <div id="overview" class="tab-pane fade in active">
+    <h3>HOME</h3>
+    <p>Some content.</p>
+  </div>
+<!--                                        --> 
+<!--            --------------              -->
+<!--            Asset Overview              -->
+<!--            --------------              -->
+<!--                                        -->                        
+<!--   <div id="assets" class="tab-pane fade"> -->
+<div id="assets" class="tab-pane fade panel panel-default">
+
+  <a class="btn btn-primary pull-right" href="#" onclick="$('#addAssetModal').modal('show');">
+    <i class="fa fa-plus fa-lg"></i> 
+    Add New Asset
+  </a>
+  
+  <table class="table table-striped table-hover table-condensed">
+    <thead><tr>
+        <th>Asset</th>
+        <th>Value</th>
+        <th>Total Return</th>
+       
+    </tr></thead>
+    <tbody>
+    <tr>
+        <td><i class="fa fa-money" aria-hidden="true" hover="Cash"> FirstBank Savings account 123</i></td>
+        <td>&euro;43,324.23 </td>
+        <td><span class="label label-success">+1.39%</span></td>
+    </tr>
+     <tr>
+        <td><i class="fa fa-money" aria-hidden="true" hover="Cash"> Triodos hypotheek aflosplan</i></td>
+        <td>&euro;2.001,00</td>
+         <td><span class="label label-success">+0.00%</span></td>
+    </tr>
+    <tr>
+        <td><i class="fa fa-line-chart" aria-hidden="true" hover="Shares"> iShares Green</i></td>
+        <td>&euro;53,123.05 </td>
+         <td><span class="label label-danger">-3.39%</span></td>
+    </tr>
+    <tr>
+        <td><i class="fa fa-pie-chart" aria-hidden="true" hover="Options"> Markit options 2019</i></td>
+        <td>&euro;13,324.23 </td>
+         <td><span class="label label-success">+6.39%</span></td>
+    </tr>
+    </tbody>
+
+  </table>
+
+</div>
+
+  <div id="results" class="tab-pane fade">
+    <h3>Menu 2</h3>
+    <p>Some content in menu 2.</p>
+  </div>
+
+  <div id="analytics" class="tab-pane fade">
+    <h3>dsadasdasd 2</h3>
+    <p>Some contenasdsadasdt in menu 2.</p>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="post-preview">
+                        <a href="post.html">
+                            <h2 class="post-title">Man must explore, and this is exploration at its greatest
+                    </h2>
+                            <h3 class="post-subtitle">Problems look mighty small from 150 miles up
+                    </h3>
+                        </a>
+                        <p class="post-meta">
+                            Posted by <a href="#">Start Bootstrap</a>
+                            on September 24, 2014
+                        </p>
+                    </div>
+                    <hr>
+                    <div class="post-preview">
+                        <a href="post.html">
+                            <h2 class="post-title">I believe every human has a finite number of heartbeats. I don't intend to waste any of mine.
+                    </h2>
+                        </a>
+                        <p class="post-meta">
+                            Posted by <a href="#">Start Bootstrap</a>
+                            on September 18, 2014
+                        </p>
+                    </div>
+                    <hr>
+                    <div class="post-preview">
+                        <a href="post.html">
+                            <h2 class="post-title">Science has not yet mastered prophecy
+                    </h2>
+                            <h3 class="post-subtitle">We predict too much for the next year and yet far too little for the next ten.
+                    </h3>
+                        </a>
+                        <p class="post-meta">
+                            Posted by <a href="#">Start Bootstrap</a>
+                            on August 24, 2014
+                        </p>
+                    </div>
+                    <hr>
+                    <div class="post-preview">
+                        <a href="post.html">
+                            <h2 class="post-title">Failure is not an option
+                    </h2>
+                            <h3 class="post-subtitle">Many say exploration is part of our destiny, but it’s actually our duty to future generations.
+                    </h3>
+                        </a>
+                        <p class="post-meta">
+                            Posted by <a href="#">Start Bootstrap</a>
+                            on July 8, 2014
+                        </p>
+                    </div>
+                    <hr>
+                    <!-- Pager -->
+                    <ul class="pager">
+                        <li class="next">
+                            <a href="#">Older Posts &rarr;</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <!-- Footer -->
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                        <ul class="list-inline text-center">
+                            <li>
+                                <a href="#">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fa fa-circle fa-stack-2x"></i>
+                                        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fa fa-circle fa-stack-2x"></i>
+                                        <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fa fa-circle fa-stack-2x"></i>
+                                        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                        <p class="copyright text-muted">Copyright &copy;Your Website 2016</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!--                        -->
+        <!-- CREATE PORTFOLIO MODAL -->
+        <!--                        -->
+        <div id="createPortfolioModal" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Welcome to MoneyTrackR!</h4>
+                    </div>
+                    <div class="modal-body">
+                        <h4>
+                            <span class="pull-left">
+                                <img src="img/logo.png"/>
+                            </span>
+                            You're new over here &hellip;
+                        </h4>
+                        <br/>
+                        Let's get you started by selecting a currency for your portfolio. You can 
+                add assets of any currency to your portfolio, but the value of your assets
+                and portfolio is always expressed in the default currency. <br/>
+                        Once the default currency has been set
+                you can start adding assets to your portfolio.
+
+                <hr/>
+                        <h5>What's your default currency?</h5>
+                        <div class="form-group">
+                            <select ng-model="selectedCurrency" class="form-control" id="selectCurrency">
+                                <option value="EUR" selected>&euro; Euro</option>
+                                <option value="USD">$ US Dollar</option>
+                            </select>
+                        </div>
+                        <h6 class="text-right">
+                            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                            You cannot change the default currency once selected.
+                        </h6>
+                    </div>
+                    <div class="modal-footer">
+                        <!--                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button> -->
+                        <button type="button" class="btn btn-primary" ng-show="selectedCurrency" ng-click="home.savePortfolio()">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--                        -->
+        <!-- ADD ASSET MODAL -->
+        <!--                        -->
+        <div id="addAssetModal" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Add Asset to your Portfolio</h4>
+
+                    </div>
+                    <div class="modal-body">
+                       <form class="form-horizontal">
+                          <div class="form-group">
+                            <label class="control-label col-sm-2" for="email">Asset type:</label>
+                            <div class="col-sm-10">
+                              <input type="email" class="form-control" id="email" placeholder="Enter email">
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="control-label col-sm-2" for="pwd">Password:</label>
+                            <div class="col-sm-10"> 
+                              <input type="password" class="form-control" id="pwd" placeholder="Enter password">
+                            </div>
+                          </div>
+                          <div class="form-group"> 
+                            <div class="col-sm-offset-2 col-sm-10">
+                              <div class="checkbox">
+                                <label><input type="checkbox"> Remember me</label>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="form-group"> 
+                            <div class="col-sm-offset-2 col-sm-10">
+                              <button type="submit" class="btn btn-default">Submit</button>
+                            </div>
+                          </div>
+                        </form>
+                        
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button> 
+                        <button type="button" class="btn btn-primary" ng-show="selectedCurrency" ng-click="home.savePortfolio()">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <script type="text/javascript" src="/webjars/angularjs/1.5.8/angular.min.js"></script>
+        <script type="text/javascript">
+            
+    angular.module("app", []).controller("home", function($scope, $http, $location) {
+        var self = this;
+
+        $.LoadingOverlay("show");
+        $http.get("/portfolio")
+            .success(onPortfolioLoaded)
+            .error(onError)
+            .finally(function(){
+                $.LoadingOverlay("hide");
+        });
+        $.LoadingOverlay("show");
+        $http.get("/user").success(function(data) {
+            self.user = data.userAuthentication.details.name;
+            self.pictureUrl = data.userAuthentication.details.picture;
+        }).error(function(e) {
+            self.user = "N/A";
+            self.authenticated = false;
+        }).finally(function(){
+            $.LoadingOverlay("hide");
+        });
+        self.logout = function() {
+            $http.post('/logout', {}).success(function() {
+                self.authenticated = false;
+                window.location.replace("/");
+            }).error(function(data) {
+                console.log("Logout failed");
+                self.authenticated = false;
+            });
+        };
+        self.savePortfolio = function(){
+            $('#createPortfolioModal').modal("hide");
+            $.LoadingOverlay("show");
+            var currencyValue = $scope.selectedCurrency;// $('#selectCurrency').value;
+
+            $http.post('/portfolio', 'currency=' + currencyValue, {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+                .then(function(){
+                    alert('Portfolio saved!')
+                }, onError).finally(function(){
+                    $.LoadingOverlay("hide");
+                });
+        }
+
+        function onPortfolioLoaded(portfolio){
+            if (!portfolio){
+                $('#createPortfolioModal').modal({backdrop: 'static',keyboard: false});
+            }
+        }
+        function onError(data){
+            if (data.data){
+                data = data.data;// weird little angularJS thingy..
+            }
+            self.error = data.error;
+            self.errorMessage = data.message;
+        }
+        
+    });
+
+        </script>
+    </body>
+</html>
