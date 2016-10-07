@@ -1,7 +1,10 @@
-bloombergQuoteService:
-  cacheTimoutMinutes: 60
-yahooCurrencyService:
-  cacheTimeoutMinutes: 720
+moneytrackr:
+  bloombergQuoteService:
+    cacheTimoutMinutes: 60
+  yahooCurrencyService:
+    cacheTimeoutMinutes: 720
+  credentials:
+    secretFile: ${user.home}/.moneytrackr.credentials
 
 spring:
   data:
@@ -10,8 +13,8 @@ spring:
 
 google:
     client:
-      clientId: ${google.client.clientId}
-      clientSecret: ${google.client.clientSecret}
+#      clientId: ${google.client.clientId}
+#      clientSecret: ${google.client.clientSecret}
       accessTokenUri: https://www.googleapis.com/oauth2/v3/token
       userAuthorizationUri: https://accounts.google.com/o/oauth2/auth
       authenticationScheme: query

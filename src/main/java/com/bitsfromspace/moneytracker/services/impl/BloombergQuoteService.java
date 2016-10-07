@@ -30,7 +30,7 @@ public class BloombergQuoteService implements QuoteService {
     private final Cache<String, Quote> quoteCache;
 
     @Inject
-    public BloombergQuoteService(Clock clock, @Value("${bloombergQuoteService.cacheTimoutMinutes}") int cacheTimeoutMinutes){
+    public BloombergQuoteService(Clock clock, @Value("${moneytrackr.bloombergQuoteService.cacheTimoutMinutes}") int cacheTimeoutMinutes){
         quoteCache = new Cache<>(clock, cacheTimeoutMinutes, TimeUnit.MINUTES);
     }
 

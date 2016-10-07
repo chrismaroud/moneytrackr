@@ -28,7 +28,7 @@ public class YahooCurrencyService implements CurrencyService {
     private final Cache<String, Double> currencyPairExchargeRateCache;
 
     @Inject
-    public YahooCurrencyService(Clock clock, @Value("${yahooCurrencyService.cacheTimeoutMinutes}") int cacheTimeoutMinutes){
+    public YahooCurrencyService(Clock clock, @Value("${moneytrackr.yahooCurrencyService.cacheTimeoutMinutes}") int cacheTimeoutMinutes){
         currencyPairExchargeRateCache = new Cache<>(clock, cacheTimeoutMinutes, TimeUnit.MINUTES);
     }
 

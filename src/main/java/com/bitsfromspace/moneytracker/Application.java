@@ -1,5 +1,6 @@
 package com.bitsfromspace.moneytracker;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
@@ -30,11 +31,13 @@ import java.time.Clock;
 @SpringBootApplication
 @EnableOAuth2Client
 @RestController
-@ComponentScan({"com.bitsfromspace.moneytracker.rest", "com.bitsfromspace.moneytracker.dao.impl"})
+@ComponentScan({"com.bitsfromspace.moneytracker.rest", "com.bitsfromspace.moneytracker.dao.impl", "com.bitsfromspace.moneytracker"})
 public class Application extends WebSecurityConfigurerAdapter{
 
     @Inject
     private OAuth2ClientContext oauth2ClientContext;
+    @Inject
+    private Credentials credentials;
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -52,6 +55,7 @@ public class Application extends WebSecurityConfigurerAdapter{
     public Principal user(Principal principal) {
         return principal;
     }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -60,22 +64,26 @@ public class Application extends WebSecurityConfigurerAdapter{
                 .anyRequest().authenticated()
                     .and().logout().logoutSuccessUrl("/").permitAll()
                     .and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                    .and().addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class);
+                    .and().addFilterBefore(ssoFilter(credentials), BasicAuthenticationFilter.class);
 
     }
 
-    private Filter ssoFilter() {
+    private Filter ssoFilter(Credentials credentials) {
+        final AuthorizationCodeResourceDetails google = google(credentials);
         OAuth2ClientAuthenticationProcessingFilter googleFilter = new OAuth2ClientAuthenticationProcessingFilter("/login/google");
-        OAuth2RestTemplate googleTemplate = new OAuth2RestTemplate(google(), oauth2ClientContext);
+        OAuth2RestTemplate googleTemplate = new OAuth2RestTemplate(google, oauth2ClientContext);
         googleFilter.setRestTemplate(googleTemplate);
-        googleFilter.setTokenServices(new UserInfoTokenServices(googleResource().getUserInfoUri(), google().getClientId()));
+        googleFilter.setTokenServices(new UserInfoTokenServices(googleResource().getUserInfoUri(), google.getClientId()));
         return googleFilter;
     }
 
     @Bean
     @ConfigurationProperties("google.client")
-    public AuthorizationCodeResourceDetails google() {
-        return new AuthorizationCodeResourceDetails();
+    public AuthorizationCodeResourceDetails google(Credentials credentials) {
+        final AuthorizationCodeResourceDetails details = new AuthorizationCodeResourceDetails();
+        details.setClientId(credentials.getGoogleClientId());
+        details.setClientSecret(credentials.getGoogleClientSecret());
+        return details;
     }
 
     @Bean

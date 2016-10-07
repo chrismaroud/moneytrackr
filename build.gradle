@@ -1,3 +1,6 @@
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 buildscript {
 	ext {
 		springBootVersion = '1.4.1.RELEASE'
@@ -24,13 +27,12 @@ credentials.load(file(System.getProperty('user.home') + '/.gradle.credentials').
 //task copy(type: Copy) {
 //    from 'src/main/resources'
 //    into "$buildDir"
-//    include 'application-template.yaml'
+//    include 'application.yaml'
 //    rename { file -> 'application.yaml' }
 //    expand(project: project, title: 'ProjectInfo', generated: new Date())
 //}
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+
 
 repositories {
 	mavenCentral()
@@ -44,9 +46,7 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-mongodb')
 	compile('org.springframework.boot:spring-boot-starter-jersey')
 	compile('org.springframework.boot:spring-boot-starter-security')
-//	compile 'com.bitsfromspace:utils:1.0-SNAPSHOT'
-    compile 'com.bitsfromspace:utils:1.0-SNAPSHOT'
-//    compile('org.springframework.boot:spring-boot-starter-thymeleaf')
+    compile 'com.bitsfromspace:utils:1.02-SNAPSHOT'
 	compile('org.springframework.boot:spring-boot-devtools') //TODO: Remove from prod classpath?
     compile('org.springframework.security.oauth:spring-security-oauth2')
 
@@ -54,19 +54,9 @@ dependencies {
     compile 'org.webjars:bootstrap:3.3.7'
 
     compile 'org.jsoup:jsoup:1.8.3'
-	compile 'com.eclipsesource.minimal-json:minimal-json:0.9.4'
+    compile 'com.eclipsesource.minimal-json:minimal-json:0.9.4'
 
-	testCompile('org.springframework.boot:spring-boot-starter-test')
-	//compile project(":utils")
-}
-
-
-task copy(type: Copy) {
-    from 'src/main/resources'
-    into "$buildDir"
-    include 'application-template.yaml'
-    rename { file -> 'application.yaml' }
-    //expand(project: project, title: 'ProjectInfo', generated: new Date())
-    expand(credentials)
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+    //compile project(":utils")
 }
 
