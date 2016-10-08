@@ -4,7 +4,10 @@ import com.bitsfromspace.moneytracker.dao.Dao;
 import com.bitsfromspace.moneytracker.model.*;
 import com.bitsfromspace.moneytracker.services.AssetValueCalculationService;
 import com.bitsfromspace.moneytracker.services.Currency;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -51,10 +54,11 @@ public class MoneyTrackerRestService {
 
     @RequestMapping(value="/asset", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON)
     public Portfolio addAsset(Principal user, AssetType assetType, Currency currency,
-                         @RequestParam(required = false) Double initialAmount,
-                         @RequestParam(required = false) String bbSymbol,
-                         @RequestParam(required = false) Integer numberOfShares,
-                         @RequestParam(required = false) Double strikePrice) {
+                              @RequestParam(required = false) Double initialAmount,
+                              @RequestParam(required = false) Double interestPercentage,
+                              @RequestParam(required = false) String bbSymbol,
+                              @RequestParam(required = false) Integer numberOfShares,
+                              @RequestParam(required = false) Double strikePrice) {
 
         notNull(assetType, "assetType");
         notNull(currency, "currency");
@@ -63,7 +67,7 @@ public class MoneyTrackerRestService {
         final Portfolio portfolio = getPortfolio(user);
         notNull(portfolio, () -> "Unable to find portfolio for user");
 
-        final Asset asset = createAsset(assetType, currency, initialAmount, bbSymbol, numberOfShares, strikePrice);
+        final Asset asset = createAsset(assetType, currency, initialAmount, interestPercentage, bbSymbol, numberOfShares, strikePrice);
         setInitialValue(asset, portfolio.getCurrency());
         portfolio.addAsset(asset);
         return dao.save(portfolio);
@@ -77,14 +81,15 @@ public class MoneyTrackerRestService {
              .setHighestValue(initialValue);
     }
 
-    private Asset createAsset(AssetType assetType, Currency currency, Double initialAmount, String bbSymbol, Integer numberOfShares, Double strikePrice) {
+    private Asset createAsset(AssetType assetType, Currency currency, Double initialAmount, Double interestPercentage, String bbSymbol, Integer numberOfShares, Double strikePrice) {
         final String id = UUID.randomUUID().toString();
         final LocalDate createDate = LocalDate.now(clock);
 
         switch (assetType){
             case CASH: {
                 notNull(initialAmount, "initialAmount");
-                return new Cash(id, createDate, currency, initialAmount);
+                notNull(interestPercentage, "interestPercentage");
+                return new Cash(id, createDate, currency, initialAmount).setInterestPercentage(interestPercentage);
             }
             case SHARE: {
                 notNull(numberOfShares, "numberOfShares");
