@@ -53,7 +53,7 @@ public class MoneyTrackerRestService {
     }
 
     @RequestMapping(value="/asset", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON)
-    public Portfolio addAsset(Principal user, AssetType assetType, Currency currency,
+    public Portfolio addAsset(Principal user, AssetType assetType, String name, Currency currency,
                               @RequestParam(required = false) Double initialAmount,
                               @RequestParam(required = false) Double interestPercentage,
                               @RequestParam(required = false) String bbSymbol,
@@ -67,7 +67,7 @@ public class MoneyTrackerRestService {
         final Portfolio portfolio = getPortfolio(user);
         notNull(portfolio, () -> "Unable to find portfolio for user");
 
-        final Asset asset = createAsset(assetType, currency, initialAmount, interestPercentage, bbSymbol, numberOfShares, strikePrice);
+        final Asset asset = createAsset(assetType, name, currency, initialAmount, interestPercentage, bbSymbol, numberOfShares, strikePrice);
         setInitialValue(asset, portfolio.getCurrency());
         portfolio.addAsset(asset);
         return dao.save(portfolio);
@@ -81,7 +81,7 @@ public class MoneyTrackerRestService {
              .setHighestValue(initialValue);
     }
 
-    private Asset createAsset(AssetType assetType, Currency currency, Double initialAmount, Double interestPercentage, String bbSymbol, Integer numberOfShares, Double strikePrice) {
+    private Asset createAsset(AssetType assetType, String name, Currency currency, Double initialAmount, Double interestPercentage, String bbSymbol, Integer numberOfShares, Double strikePrice) {
         final String id = UUID.randomUUID().toString();
         final LocalDate createDate = LocalDate.now(clock);
 
@@ -89,16 +89,16 @@ public class MoneyTrackerRestService {
             case CASH: {
                 notNull(initialAmount, "initialAmount");
                 notNull(interestPercentage, "interestPercentage");
-                return new Cash(id, createDate, currency, initialAmount).setInterestPercentage(interestPercentage);
+                return new Cash(id, name, createDate, currency, initialAmount).setInterestPercentage(interestPercentage);
             }
             case SHARE: {
                 notNull(numberOfShares, "numberOfShares");
-                return new Share(id, createDate, currency, bbSymbol).setNumberOfShares(numberOfShares);
+                return new Share(id, name, createDate, currency, bbSymbol).setNumberOfShares(numberOfShares);
             }
             case OPTION:{
                 notNull(numberOfShares, "numberOfShares");
                 notNull(strikePrice, "strikePrice");
-                return new Option(id, createDate, currency, bbSymbol, strikePrice).setNumberOfShares(numberOfShares);
+                return new Option(id, name, createDate, currency, bbSymbol, strikePrice).setNumberOfShares(numberOfShares);
             }
             default: throw new IllegalArgumentException("Unknown asset type: " + assetType);
         }

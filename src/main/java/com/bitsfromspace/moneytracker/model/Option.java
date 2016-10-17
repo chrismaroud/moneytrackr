@@ -12,8 +12,8 @@ public class Option extends Share {
 
     private final double strikePrice;
 
-    public Option(String id, LocalDate createDate, Currency currency, String bbSymbol, double strikePrice) {
-        super(id, createDate, currency, bbSymbol);
+    public Option(String id, String name, LocalDate createDate, Currency currency, String bbSymbol, double strikePrice) {
+        super(id, name, createDate, currency, bbSymbol);
         this.strikePrice = strikePrice;
     }
 

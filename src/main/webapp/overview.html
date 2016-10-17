@@ -149,7 +149,15 @@
        
     </tr></thead>
     <tbody>
-    <tr>
+        <tr ng-repeat="asset in portfolio.assets">
+            <td><i class="fa fa-money" aria-hidden="true" hover="Cash"> {{asset.name}}</i></td>
+            <td>{{asset.latestValue.value}} </td>
+            <td><span class="label label-success">{{asset.latestValue.change}}</span></td>
+            
+        </tr>
+    </tbody>
+
+<!--     <tr>
         <td><i class="fa fa-money" aria-hidden="true" hover="Cash"> FirstBank Savings account 123</i></td>
         <td>&euro;43,324.23 </td>
         <td><span class="label label-success">+1.39%</span></td>
@@ -169,7 +177,7 @@
         <td>&euro;13,324.23 </td>
          <td><span class="label label-success">+6.39%</span></td>
     </tr>
-    </tbody>
+    </tbody> -->
 
   </table>
 
@@ -365,11 +373,21 @@
                             <div class="tab-pane fade in active" id="addAsset_cash">
                                 <form class="form-horizontal">
                                     <div class="form-group">
-                                        <label class="control-label col-sm-4" for="pwd">Amount:</label>
+                                        <label class="control-label col-sm-4" for="pwd">Asset name:</label>
+                                        <div class="col-sm-8">
+                                            <div class="input-group">
+                                                <input id="addAsset_cash_name" type="text"
+                                                       class="form-control text-right">
+                                            </div>
+
+                                        </div>
+                                    </div><!-- form-group -->
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" >Amount:</label>
                                         <div class="col-sm-8">
                                             <div class="input-group">
 
-                                                <span class="input-group-addon">$/&euro;</span>
+                                                <span class="input-group-addon">{{home.portfolio.currency}}$/&euro;</span>
                                                 <input id="addAsset_cash_amount" type="number" class="form-control"
                                                        aria-label="Amount (to the nearest dollar)">
                                             </div>
@@ -393,6 +411,16 @@
 
                             <div class="tab-pane fade in" id="addAsset_share">
                                 <form class="form-horizontal">
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="pwd">Asset name:</label>
+                                        <div class="col-sm-8">
+                                            <div class="input-group">
+                                                <input id="addAsset_share_name" type="text"
+                                                       class="form-control text-right">
+                                            </div>
+
+                                        </div>
+                                    </div><!-- form-group -->
                                     <div class="form-group">
                                         <label class="control-label col-sm-4" for="pwd">Currency:</label>
                                         <div class="col-sm-8">
@@ -421,6 +449,16 @@
 
                             <div class="tab-pane fade in" id="addAsset_option">
                                 <form class="form-horizontal">
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="pwd">Asset name:</label>
+                                        <div class="col-sm-8">
+                                            <div class="input-group">
+                                                <input id="addAsset_option_name" type="text"
+                                                       class="form-control text-right">
+                                            </div>
+
+                                        </div>
+                                    </div><!-- form-group -->
                                     <div class="form-group">
                                         <label class="control-label col-sm-4" for="pwd">Currency:</label>
                                         <div class="col-sm-8">
@@ -470,7 +508,7 @@
                     </div><!-- model-body -->
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary" ng-click="home.savePortfolio()">Save</button>
+                        <button type="button" class="btn btn-primary" ng-click="home.addAsset()">Save</button>
                     </div> <!-- modeal-footer -->
                 </div><!-- modal-content -->
             </div><!-- modal-dialog -->
@@ -484,14 +522,11 @@
             
     angular.module("app", []).controller("home", function($scope, $http, $location) {
         var self = this;
+        var portfolio;
 
-        $.LoadingOverlay("show");
-        $http.get("/portfolio")
-            .success(onPortfolioLoaded)
-            .error(onError)
-            .finally(function(){
-                $.LoadingOverlay("hide");
-        });
+        loadPortfolio();
+
+        
         $.LoadingOverlay("show");
         $http.get("/user").success(function(data) {
             self.user = data.userAuthentication.details.name;
@@ -502,6 +537,15 @@
         }).finally(function(){
             $.LoadingOverlay("hide");
         });
+        self.loadPortfolio = function(){
+                $.LoadingOverlay("show");
+                $http.get("/portfolio")
+                    .success(onPortfolioLoaded)
+                    .error(onError)
+                    .finally(function(){
+                        $.LoadingOverlay("hide");
+                });
+        };
         self.logout = function() {
             $http.post('/logout', {}).success(function() {
                 self.authenticated = false;
@@ -522,13 +566,57 @@
                 }, onError).finally(function(){
                     $.LoadingOverlay("hide");
                 });
-        }
+        };
+
+        self.addAsset = function(){
+            var query = '';
+
+            if ($('#addAsset_cash').hasClass('active')){
+                query  = 'assetType=CASH';
+                query += '&name=' + $('#addAsset_cash_name').val();
+                query += '&currency=' + (self.portfolio?self.portfolio.currency:portfolio.currency);
+                query += '&interestPercentage=' + $('#addAsset_cash_interestPercentage').val();
+                query += '&initialAmount=' + $('#addAsset_cash_amount').val();
+            } else if ($('#addAsset_share').hasClass('active')){
+                query  = 'assetType=SHARE';
+                query += '&name=' + $('#addAsset_share_name').val();
+                query += '&currency=' + $('#addAsset_share_currency').val();
+                query += '&bbSymbol=' + $('#addAsset_share_bbSymbol').val();
+                query += '&numberOfShares=' + $('#addAsset_share_numberOfShares').val();
+            } else if ($('#addAsset_option').hasClass('active')){
+                query  = 'assetType=OPTION';
+                query += '&name=' + $('#addAsset_option_name').val();
+                query += '&currency=' + $('#addAsset_option_currency').val();
+                query += '&bbSymbol=' + $('#addAsset_option_bbSymbol').val();
+                query += '&numberOfShares=' + $('#addAsset_option_numberOfShares').val();
+                query += '&strikePrice=' + $('addAsset_option_strikePrice').val();
+            }
+            $.LoadingOverlay("show");
+             $http.post('/asset', query, {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+                .then(function(){
+                    alert('Asset saved!')
+                }, onError).finally(function(){
+                    $.LoadingOverlay("hide");
+                    $('#addAssetModal').modal("hide");
+                    loadPortfolio();
+                });
+
+
+//             $http.post('/addAsset',?,{headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+//                 .then(function(){
+//                         alert('Asset added!')
+//                 }, onError).finally(function(){
+//                    $.LoadingOverlay("hide");       
+//                 });
+        };
+
 
         function onPortfolioLoaded(portfolio){
             if (!portfolio){
                 $('#createPortfolioModal').modal({backdrop: 'static',keyboard: false});
             }
-        }
+            self.portfolio = portfolio;
+        };
         function onError(data){
             if (data.data){
                 data = data.data;// weird little angularJS thingy..

@@ -14,6 +14,7 @@ import java.time.LocalDate;
 public abstract class Asset {
     @Id
     private final String id;
+    private final String name;
     private final Currency currency;
     private final LocalDate createDate;
 
@@ -22,8 +23,9 @@ public abstract class Asset {
     private AssetValue highestValue;
     private AssetValue lowestValue;
 
-    protected Asset(String id, LocalDate createDate, Currency currency) {
+    protected Asset(String id, String name, LocalDate createDate, Currency currency) {
         this.id = id;
+        this.name = name;
         this.createDate = createDate;
         this.currency = currency;
     }
@@ -78,4 +80,7 @@ public abstract class Asset {
         return this;
     }
 
+    public String getName() {
+        return name;
+    }
 }

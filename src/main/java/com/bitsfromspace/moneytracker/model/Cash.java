@@ -13,8 +13,8 @@ public class Cash extends Asset {
     private final double initialAmount;
     private double interestPercentage;
 
-    public Cash(String id, LocalDate createDate, Currency currency, double initialAmount) {
-        super(id, createDate, currency);
+    public Cash(String id, String name, LocalDate createDate, Currency currency, double initialAmount) {
+        super(id, name, createDate, currency);
         this.initialAmount = initialAmount;
     }
 

@@ -13,8 +13,8 @@ public class Share extends Asset {
     private final String bbSymbol;
     private double numberOfShares;
 
-    public Share(String id, LocalDate createDate, Currency currency, String bbSymbol) {
-        super(id, createDate, currency);
+    public Share(String id, String name, LocalDate createDate, Currency currency, String bbSymbol) {
+        super(id, name, createDate, currency);
         this.bbSymbol = bbSymbol;
     }
 
